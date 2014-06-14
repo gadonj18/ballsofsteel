@@ -51,6 +51,7 @@ public class BallSpawner : MonoBehaviour {
 
 	void OnGUI() {
 		GUI.skin.label.fontSize = 40;
+		GUI.color = this.logic.textColor;
 		float timeLeft = Mathf.Ceil(this.ballDelay - (Time.time - this.lastBall));
 		if(this.logic.GameState == "Playing" && timeLeft > 0 && timeLeft <= 3.0f) {
 			GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), timeLeft.ToString());

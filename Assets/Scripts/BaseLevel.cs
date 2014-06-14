@@ -5,4 +5,5 @@ public class BaseLevel : MonoBehaviour {
 	public int targetHits;
 	public Sprite background;
 	public AudioClip backgroundMusic;
+	public Color textColor = Color.white;
 }

@@ -7,6 +7,8 @@ public class MainGameLogic : MonoBehaviour {
 	private ApplicationLogic logic; //Keep reference to script managing interactions between scenes
 	public Camera mainCam; //Camera needed for calculating screen dimensions
 	public BallSpawner ballSpawner; //Keep a reference to turn on/off
+	public SpriteRenderer background;
+	public Color textColor;
 
 	//On screen text elements
 	public GUIText scoreText;
@@ -35,12 +37,11 @@ public class MainGameLogic : MonoBehaviour {
 	private string gameState;
 
 	void Start() {
+		Screen.showCursor = false;
+
 		this.GameState = "Init";
 		this.logic = GameObject.Find("_ApplicationLogic").GetComponent<ApplicationLogic>();
-
-		BaseLevel level = (BaseLevel)Instantiate(Resources.Load("Level" + this.logic.CurrentLevel, typeof(BaseLevel)));
-		this.targetHits = (uint)level.targetHits;
-		Screen.showCursor = false;
+		this.LoadLevel((BaseLevel)Instantiate(Resources.Load("Level" + this.logic.CurrentLevel, typeof(BaseLevel))));
 
 		this.streakHits = 0;
 		this.streakMiss = 0;
@@ -61,6 +62,32 @@ public class MainGameLogic : MonoBehaviour {
 
 		this.ballSpawner.TurnOn(3.0f);
 		this.GameState = "Playing";
+	}
+
+	private void LoadLevel(BaseLevel level) {
+		//The most important part of the level is the number of hits until you win it
+		this.targetHits = (uint)level.targetHits;
+
+		//Load background sprite and size it to the screen
+		if(level.background) {
+			this.background.sprite = level.background;
+			float width = this.background.sprite.bounds.size.x;
+			float height = this.background.sprite.bounds.size.y;
+			float worldScreenHeight = Camera.main.orthographicSize * 2f;
+			float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+			if(worldScreenWidth / width >= worldScreenHeight / height) {
+				this.background.transform.localScale = new Vector3(worldScreenWidth / width, worldScreenWidth / width, 1);
+			} else {
+				this.background.transform.localScale = new Vector3(worldScreenHeight / height, worldScreenHeight / height, 1);
+			}
+		}
+		
+		//Text color must be changed to be legible on background image
+		this.textColor = level.textColor;
+		this.scoreText.color = this.textColor;
+		this.hitsText.color = this.textColor;
+
+		//TODO: Change paddle/ball sprites if they're hard to see on background image
 	}
 
 	//Keep a list of each ball (called from BallSpawner)
@@ -154,6 +181,7 @@ public class MainGameLogic : MonoBehaviour {
 	}
 
 	void OnGUI() {
+		GUI.color = this.textColor;
 		if(this.GameState == "WonGame") {
 			GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 50, 310, 100), "Level Completed!");
 		} else if(this.GameState == "LostGame") {
