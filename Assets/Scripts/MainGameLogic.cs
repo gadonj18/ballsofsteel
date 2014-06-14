@@ -32,9 +32,10 @@ public class MainGameLogic : MonoBehaviour {
 	private long score;
 
 	void Start() {
-		BaseLevel level = (BaseLevel)Instantiate(Resources.Load("Level1", typeof(BaseLevel)));
+		this.logic = GameObject.Find("_ApplicationLogic").GetComponent<ApplicationLogic>();
+
+		BaseLevel level = (BaseLevel)Instantiate(Resources.Load("Level" + this.logic.CurrentLevel, typeof(BaseLevel)));
 		this.targetHits = (uint)level.targetHits;
-		Debug.Log(this.targetHits);
 		Screen.showCursor = false;
 
 		this.streakHits = 0;

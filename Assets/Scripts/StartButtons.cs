@@ -3,7 +3,11 @@ using System.Collections;
 
 //Draws and handles the click events of the buttons on the start screen
 public class StartButtons : MonoBehaviour {
-	public ApplicationLogic logic; //Keep reference to script managing interactions between scenes
+	private  ApplicationLogic logic; //Keep reference to script managing interactions between scenes
+
+	void Start() {
+		this.logic = GameObject.Find("_ApplicationLogic").GetComponent<ApplicationLogic>();
+	}
 
 	//Not ENTIRELY sure what this function actually is or when it's called
 	//Its named like it should be called once but behavious like a Draw() loop or some shit

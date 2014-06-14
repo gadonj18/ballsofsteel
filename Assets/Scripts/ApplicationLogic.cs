@@ -4,23 +4,15 @@ using System.Collections.Generic;
 
 //This class handles interactions between the scenes and stores data to persist across scenes
 public class ApplicationLogic : MonoBehaviour {
-	public static ApplicationLogic control; //Used for singleton-like behaviour
-	public List<BaseLevel> levels = new List<BaseLevel>();
 
 	private string playerName; //Not sure why I even need this, I guess for high scores?
 	private long currentScore; //Will carry through to the scoreboard
 	private ushort currentLevel; //Level being played
 	private ushort unlockedLevel; //Highest level user has unlocked (Default = 1)
 
-	void Awake() {
-		//Ensure that there is only ever 1 instance of this object
-		if(control == null) {
-			DontDestroyOnLoad(this.gameObject);
-			control = this;
-		} else if(control != this) {
-			Destroy(this.gameObject);
-			return;
-		}
+	void Start() {
+		//Used to persist object across scenes
+		DontDestroyOnLoad(this.gameObject);
 
 		//Initialize the settings we want to save/persist across scenes
 		this.PlayerName = PlayerPrefs.GetString("PlayerName", System.Environment.UserName);
