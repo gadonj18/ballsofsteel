@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 //This class handles interactions between the scenes and stores data to persist across scenes
 public class ApplicationLogic : MonoBehaviour {
-
 	private string playerName; //Not sure why I even need this, I guess for high scores?
 	private long currentScore; //Will carry through to the scoreboard
 	private ushort currentLevel; //Level being played

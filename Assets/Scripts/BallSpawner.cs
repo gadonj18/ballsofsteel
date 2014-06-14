@@ -4,22 +4,27 @@ using System.Collections;
 //Factory for creating ball objects from its own position in-game
 public class BallSpawner : MonoBehaviour {
 	public Transform ballPrefab; //See the prefabs folder for the asset to be created
-	public MainGameLogic logic; //Keep a reference to the script managing game logic
-	private float nextBallIn; //Time in seconds between balls
+	public MainGameLogic logic; //Keep a reference to the script managinglastBall game logic
+	private float ballDelay; //Time in seconds between balls
+	private float lastBall; //Timestamp when the last ball was spawned
 
 	void Start() {
-		nextBallIn = 0;
-		this.TurnOn();
+		this.ballDelay = 0.0f;
+		this.lastBall = Time.time;
 	}
 
 	//Starts spawning balls with a delay
 	public void TurnOn(float nextBall) {
-		this.nextBallIn = nextBall;
-		StartCoroutine("MakeBall");
+		this.ballDelay = nextBall;
+		Invoke("DelaySpawn", this.ballDelay);
 	}
 
 	//Starts spawning balls
 	public void TurnOn() {
+		StartCoroutine("MakeBall");
+	}
+
+	private void DelaySpawn() {
 		StartCoroutine("MakeBall");
 	}
 
@@ -34,8 +39,17 @@ public class BallSpawner : MonoBehaviour {
 			Transform newBall = (Transform)Instantiate(this.ballPrefab, this.transform.position, this.transform.rotation);
 			newBall.gameObject.layer = LayerMask.NameToLayer("BallLayer"); //Layer stops balls from colliding with each other
 			this.logic.AddBall(newBall); //Game logic script keeps a list of active balls
-			this.nextBallIn = 8.0f + Random.Range(-2.0f, 2.0f); //Needs a little variation or else each game will always have the same-timed balls
-			yield return new WaitForSeconds(this.nextBallIn); //This delays the coroutine
+			this.lastBall = Time.time;
+			this.ballDelay = 8.0f + Random.Range(-2.0f, 2.0f); //Needs a little variation or else each game will always have the same-timed balls
+			yield return new WaitForSeconds(this.ballDelay); //This delays the coroutine
+		}
+	}
+
+	void OnGUI() {
+		GUI.skin.label.fontSize = 40;
+		float timeLeft = Mathf.Ceil(this.ballDelay - (Time.time - this.lastBall));
+		if(timeLeft > 0 && timeLeft <= 3.0f) {
+			GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), timeLeft.ToString());
 		}
 	}
 }

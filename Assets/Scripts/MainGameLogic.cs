@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 //This class handles interactions between objects in the main game scene
 public class MainGameLogic : MonoBehaviour {
-	public ApplicationLogic logic; //Keep reference to script managing interactions between scenes
+	private ApplicationLogic logic; //Keep reference to script managing interactions between scenes
 	public Camera mainCam; //Camera needed for calculating screen dimensions
+	public BallSpawner ballSpawner; //Keep a reference to turn on/off
 
 	//On screen text elements
 	public GUIText scoreText;
@@ -31,7 +32,10 @@ public class MainGameLogic : MonoBehaviour {
 	private uint totalHits;
 	private long score;
 
+	private string gameState;
+
 	void Start() {
+		this.gameState = "Init";
 		this.logic = GameObject.Find("_ApplicationLogic").GetComponent<ApplicationLogic>();
 
 		BaseLevel level = (BaseLevel)Instantiate(Resources.Load("Level" + this.logic.CurrentLevel, typeof(BaseLevel)));
@@ -54,6 +58,9 @@ public class MainGameLogic : MonoBehaviour {
 
 		this.rightWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height * 2f, 0f)).y);
 		this.rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).x + 0.5f, 0f);
+
+		this.gameState = "Starting";
+		this.ballSpawner.TurnOn(3.0f);
 	}
 
 	//Keep a list of each ball (called from BallSpawner)
@@ -74,6 +81,11 @@ public class MainGameLogic : MonoBehaviour {
 
 		//Update the score on the GUI
 		this.UpdateGUI();
+
+		if(this.totalHits == this.targetHits) {
+			this.WinGame();
+			return;
+		}
 
 		//Ensure vertical velocity remains constant each bounce.
 		//Add to horizontal velocity based on where the ball hit the paddle.
@@ -103,6 +115,18 @@ public class MainGameLogic : MonoBehaviour {
 
 		//Update the score on the GUI
 		this.UpdateGUI();
+
+		if(this.score <= 0 || this.balls.Count == 0) {
+			this.LoseGame();
+		}
+	}
+
+	private void WinGame() {
+		this.gameState = "WonGame";
+	}
+
+	private void LoseGame() {
+		this.gameState = "LostGame";
 	}
 
 	//Pretty self explanatory
