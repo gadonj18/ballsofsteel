@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: e2e4de894a970824b8ced42954c4071b
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - logic: {instanceID: 0}
+  - mainCam: {instanceID: 0}
+  - scoreText: {instanceID: 0}
+  - hitsText: {instanceID: 0}
+  - topWall: {instanceID: 0}
+  - bottomWall: {instanceID: 0}
+  - leftWall: {instanceID: 0}
+  - rightWall: {instanceID: 0}
+  - buzzerSound: {fileID: 8300000, guid: b658045fa410baa41a876db8f1e23da1, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ApplicationLogic.cs">
+    <Files>
+      <File FileName="Assets\Scripts\PaddleControl.cs" Line="17" Column="93" />
+      <File FileName="Assets\Scripts\MainGameLogic.cs" Line="54" Column="3" />
+      <File FileName="Assets\Scripts\GameLogic.js" Line="59" Column="39" />
+      <File FileName="Assets\Scripts\BallSpawner.cs" Line="27" Column="26" />
+      <File FileName="Assets\Scripts\BottomWall.cs" Line="8" Column="42" />
+      <File FileName="Assets\Scripts\ApplicationLogic.cs" Line="5" Column="82" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
