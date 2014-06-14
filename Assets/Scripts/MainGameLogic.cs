@@ -35,7 +35,7 @@ public class MainGameLogic : MonoBehaviour {
 	private string gameState;
 
 	void Start() {
-		this.gameState = "Init";
+		this.GameState = "Init";
 		this.logic = GameObject.Find("_ApplicationLogic").GetComponent<ApplicationLogic>();
 
 		BaseLevel level = (BaseLevel)Instantiate(Resources.Load("Level" + this.logic.CurrentLevel, typeof(BaseLevel)));
@@ -59,8 +59,8 @@ public class MainGameLogic : MonoBehaviour {
 		this.rightWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height * 2f, 0f)).y);
 		this.rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).x + 0.5f, 0f);
 
-		this.gameState = "Starting";
 		this.ballSpawner.TurnOn(3.0f);
+		this.GameState = "Playing";
 	}
 
 	//Keep a list of each ball (called from BallSpawner)
@@ -122,16 +122,47 @@ public class MainGameLogic : MonoBehaviour {
 	}
 
 	private void WinGame() {
-		this.gameState = "WonGame";
+		this.GameState = "WonGame";
+		this.StopGame();
+		Invoke("NextLeve", 3.0f);
 	}
 
 	private void LoseGame() {
-		this.gameState = "LostGame";
+		this.GameState = "LostGame";
+		this.StopGame();
+	}
+
+	private void StopGame() {
+		this.ballSpawner.TurnOff();
+		Time.timeScale = 0;
+	}
+
+	public void PauseGame(bool pause = true) {
+		if(pause) {
+			Time.timeScale = 0;
+			this.GameState = "Paused";
+		} else {
+			Time.timeScale = 1;
+			this.GameState = "Playing";
+		}
 	}
 
 	//Pretty self explanatory
 	private void UpdateGUI() {
 		this.scoreText.text = "Score: " + this.score;
 		this.hitsText.text = "Hits: " + this.totalHits;	
+	}
+
+	void OnGUI() {
+		if(this.GameState == "WonGame") {
+			GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), "Level Passed!");
+		} else if(this.GameState == "LostGame") {
+			GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), "You Lose :(");
+		}
+	}
+
+	public string GameState {
+		get { return this.gameState; }
+		private set { this.gameState = value; }
 	}
 }

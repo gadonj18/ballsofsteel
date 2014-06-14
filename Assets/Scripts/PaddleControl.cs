@@ -15,11 +15,16 @@ public class PaddleControl : MonoBehaviour {
 	//Lock the paddle to a constan y position
 	//Map the paddle's x position to the mouse
 	void Update() {
-		this.transform.position = new Vector3(
-			this.mainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, 0f, 0f)).x, 
-			mainCam.ScreenToWorldPoint(new Vector3(0f, 50f, 0f)).y, 
-			this.transform.position.z
-		);
+		if(Input.GetMouseButtonDown(1)) {
+			this.logic.PauseGame(this.logic.GameState == "Paused" ? false : true);
+		}
+		if(this.logic.GameState != "Paused") {
+			this.transform.position = new Vector3(
+				this.mainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, 0f, 0f)).x, 
+				mainCam.ScreenToWorldPoint(new Vector3(0f, 50f, 0f)).y, 
+				this.transform.position.z
+			);
+		}
 	}
 
 	//Basically just used to notify the main game logic script that a ball was bounced

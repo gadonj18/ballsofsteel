@@ -16,12 +16,16 @@ public class BallSpawner : MonoBehaviour {
 	//Starts spawning balls with a delay
 	public void TurnOn(float nextBall) {
 		this.ballDelay = nextBall;
-		Invoke("DelaySpawn", this.ballDelay);
+		this.TurnOn();
 	}
 
 	//Starts spawning balls
 	public void TurnOn() {
-		StartCoroutine("MakeBall");
+		if(this.ballDelay > 0.0f) {
+			Invoke("DelaySpawn", this.ballDelay);
+		} else {
+			StartCoroutine("MakeBall");
+		}
 	}
 
 	private void DelaySpawn() {
@@ -48,7 +52,7 @@ public class BallSpawner : MonoBehaviour {
 	void OnGUI() {
 		GUI.skin.label.fontSize = 40;
 		float timeLeft = Mathf.Ceil(this.ballDelay - (Time.time - this.lastBall));
-		if(timeLeft > 0 && timeLeft <= 3.0f) {
+		if(this.logic.GameState == "Playing" && timeLeft > 0 && timeLeft <= 3.0f) {
 			GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), timeLeft.ToString());
 		}
 	}
