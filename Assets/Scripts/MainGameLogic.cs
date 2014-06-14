@@ -155,9 +155,9 @@ public class MainGameLogic : MonoBehaviour {
 
 	void OnGUI() {
 		if(this.GameState == "WonGame") {
-			GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), "Level Passed!");
+			GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 50, 310, 100), "Level Completed!");
 		} else if(this.GameState == "LostGame") {
-			GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), "You Lose :(");
+			GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 200, 100), "You Lose :(");
 		}
 	}
 
