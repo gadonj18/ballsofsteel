@@ -20,16 +20,34 @@ public class ApplicationLogic : MonoBehaviour {
 		this.UnlockedLevel = (ushort)PlayerPrefs.GetInt("UnlockedLevel", 1);
 	}
 
-	//Switch scene
+	//On button click from start screen
 	public void ShowLevelSelect() {
 		Application.LoadLevel("LevelSelect");
 	}
 
-	//Switch scene
-	public void StartGame(ushort levelNum) {
-		this.CurrentLevel = levelNum;
+	//On button click from start screen
+	public void StartGame(ushort levelNum = 0) {
+		if(levelNum > 0) this.CurrentLevel = levelNum;
 		this.CurrentScore = 0;
 		Application.LoadLevel("MainGameScene");
+	}
+
+	private void NextLevel() {
+		this.CurrentLevel++;
+		this.StartGame();
+	}
+
+	private void ReplayLevel() {
+		this.StartGame(this.CurrentLevel);
+	}
+
+	public void WinGame() {
+		//TODO: Keep scores. Should the high score screen be shown after each level?
+		Invoke("NextLevel", 3.0f);
+	}
+
+	public void LoseGame() {
+		Invoke("ReplayLevel", 3.0f);
 	}
 
 	//--------------- GETTERS/SETTERS BELOW --------------------------

@@ -151,26 +151,39 @@ public class MainGameLogic : MonoBehaviour {
 	private void WinGame() {
 		this.GameState = "WonGame";
 		this.StopGame();
-		Invoke("NextLeve", 3.0f);
+		this.logic.WinGame();
 	}
 
 	private void LoseGame() {
 		this.GameState = "LostGame";
 		this.StopGame();
+		this.logic.LoseGame();
 	}
 
 	private void StopGame() {
 		this.ballSpawner.TurnOff();
-		Time.timeScale = 0;
+		this.FreezeBalls();
 	}
 
 	public void PauseGame(bool pause = true) {
 		if(pause) {
-			Time.timeScale = 0;
+			this.FreezeBalls();
 			this.GameState = "Paused";
 		} else {
-			Time.timeScale = 1;
+			this.UnFreezeBalls();
 			this.GameState = "Playing";
+		}
+	}
+
+	public void FreezeBalls() {
+		for(int i = 0; i < this.balls.Count; i++) {
+			((Transform)(this.balls[i])).rigidbody2D.isKinematic = true;
+		}
+	}
+
+	public void UnFreezeBalls() {
+		for(int i = 0; i < this.balls.Count; i++) {
+			((Transform)(this.balls[i])).rigidbody2D.isKinematic = false;
 		}
 	}
 

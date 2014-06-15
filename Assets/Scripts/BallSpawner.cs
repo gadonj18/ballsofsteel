@@ -42,6 +42,7 @@ public class BallSpawner : MonoBehaviour {
 		while(true) {
 			Transform newBall = (Transform)Instantiate(this.ballPrefab, this.transform.position, this.transform.rotation);
 			newBall.gameObject.layer = LayerMask.NameToLayer("BallLayer"); //Layer stops balls from colliding with each other
+			newBall.rigidbody2D.velocity = new Vector2(Random.Range(-4.0f, 4.0f), 0);
 			this.logic.AddBall(newBall); //Game logic script keeps a list of active balls
 			this.lastBall = Time.time;
 			this.ballDelay = 8.0f + Random.Range(-2.0f, 2.0f); //Needs a little variation or else each game will always have the same-timed balls
