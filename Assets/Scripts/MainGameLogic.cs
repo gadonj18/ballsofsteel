@@ -132,7 +132,7 @@ public class MainGameLogic : MonoBehaviour {
 		//Update counters/scores
 		this.streakHits = 0;
 		this.streakMiss++;
-		this.score -= (long)(100 * this.streakMiss);
+		this.score -= (long)(50 * this.streakMiss);
 
 		//Play buzzer sound
 		AudioSource.PlayClipAtPoint(this.buzzerSound, new Vector3(0, 0, 0));
