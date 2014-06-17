@@ -26,7 +26,7 @@ public class ApplicationLogic : MonoBehaviour {
 
 	//On button click from start screen
 	public void ShowLevelSelect() {
-		Application.LoadLevel("LevelSelect");
+		Application.LoadLevel("LevelSelectScene");
 	}
 
 	//On button click from start screen

@@ -25,7 +25,7 @@ public class MainGameLogic : MonoBehaviour {
 	public AudioClip buzzerSound;
 
 	//Not sure why I need the list of balls
-	private ArrayList balls = new ArrayList();
+	private ArrayList balls;
 
 	//Counters/scores
 	private uint targetHits;
@@ -46,6 +46,7 @@ public class MainGameLogic : MonoBehaviour {
 		this.streakHits = 0;
 		this.streakMiss = 0;
 		this.totalHits = 0;
+		this.balls = new ArrayList();
 
 		//Setup walls using the camera and screen dimensions (should size to any resolution)
 		this.topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width * 2f, 0f, 0f)).x, 1f);
