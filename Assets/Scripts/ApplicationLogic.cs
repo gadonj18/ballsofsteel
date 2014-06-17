@@ -14,7 +14,11 @@ public class ApplicationLogic : MonoBehaviour {
 		DontDestroyOnLoad(this.gameObject);
 
 		//Initialize the settings we want to save/persist across scenes
-		this.PlayerName = PlayerPrefs.GetString("PlayerName", System.Environment.UserName);
+		#if UNITY_WEBPLAYER
+			this.PlayerName = PlayerPrefs.GetString("PlayerName", "Player1");
+		#else
+			this.PlayerName = PlayerPrefs.GetString("PlayerName", System.Environment.UserName);
+		#endif
 		this.CurrentScore = 0;
 		this.CurrentLevel = 0;
 		this.UnlockedLevel = (ushort)PlayerPrefs.GetInt("UnlockedLevel", 1);
