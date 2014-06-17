@@ -9,34 +9,31 @@ public class LevelSelectLogic : MonoBehaviour {
 	private Dictionary<ushort, BaseLevel> levels = new Dictionary<ushort, BaseLevel>();
 
 	void Start () {
+		this.LoadLevels();
 		this.CurrentLevel = 1;
 		this.ShowLevel();
 	}
 
-	private void ShowLevel() {
-		if(!levels.ContainsKey(this.CurrentLevel)) {
-			Object resource = Resources.Load("Level" + this.CurrentLevel, typeof(BaseLevel));
-			if(resource) {
-				levels.Add(this.CurrentLevel, (BaseLevel)Instantiate(resource));
-			} else {
-				this.CurrentLevel--;
-				this.ShowLevel();
-				return;
-			}
+	private void LoadLevels() {
+		for(ushort i = 1; i <= 100; i++) {
+			Object resource = Resources.Load("Level" + i, typeof(BaseLevel));
+			if(!resource) break;
+			levels.Add(i, (BaseLevel)Instantiate(resource));
 		}
+	}
+
+	private void ShowLevel() {
+		if(!levels.ContainsKey(this.CurrentLevel)) return;
 		this.PreviewImage.sprite = levels[this.CurrentLevel].background;
-		//float width = this.background.sprite.bounds.size.x;
-		//float height = this.background.sprite.bounds.size.y;
-		//float worldScreenHeight = Camera.main.orthographicSize * 2f;
-		//float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
-		//if(worldScreenWidth / width >= worldScreenHeight / height) {
-		//	this.background.transform.localScale = new Vector3(worldScreenWidth / width, worldScreenWidth / width, 1);
-		//} else {
-		//	this.background.transform.localScale = new Vector3(worldScreenHeight / height, worldScreenHeight / height, 1);
-		//}
+		//TODO: Scale image properly... too lazy right now
 	}
 
 	void OnGUI() {
+		GUI.skin.label.fontSize = 30;
+		GUI.skin.label.alignment = TextAnchor.MiddleCenter;
+		GUI.Label(new Rect(Screen.width / 2 - 70, 20, 140, 50), "Level " + this.CurrentLevel);
+		GUI.skin.label.alignment = TextAnchor.MiddleLeft;
+		GUI.Label(new Rect(Screen.width / 2 - this.PreviewImage.sprite.rect.x / 2, 60, 200, 50), "Target: " + this.levels[this.CurrentLevel].targetHits + " hits");
 		if(this.CurrentLevel == 1) GUI.enabled = false;
 		if(GUI.Button(new Rect(10, Screen.height / 2, 50, 50), "<")) {
 			this.CurrentLevel--;
