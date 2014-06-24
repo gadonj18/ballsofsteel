@@ -48,19 +48,6 @@ public class MainGameLogic : MonoBehaviour {
 		this.totalHits = 0;
 		this.balls = new ArrayList();
 
-		//Setup walls using the camera and screen dimensions (should size to any resolution)
-		this.topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width * 2f, 0f, 0f)).x, 1f);
-		this.topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height, 0f)).y + 0.5f);
-		
-		this.bottomWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width * 2f, 0f, 0f)).x, 1f);
-		this.bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)).y - 0.5f);
-		
-		this.leftWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height * 2f, 0f)).y);
-		this.leftWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)).x - 0.5f, 0f);
-
-		this.rightWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height * 2f, 0f)).y);
-		this.rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).x + 0.5f, 0f);
-
 		this.ballSpawner.TurnOn(3.0f);
 		this.GameState = "Playing";
 	}
@@ -72,14 +59,14 @@ public class MainGameLogic : MonoBehaviour {
 		//Load background sprite and size it to the screen
 		if(level.background) {
 			this.background.sprite = level.background;
-			float width = this.background.sprite.bounds.size.x;
-			float height = this.background.sprite.bounds.size.y;
-			float worldScreenHeight = Camera.main.orthographicSize * 2f;
-			float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
-			if(worldScreenWidth / width >= worldScreenHeight / height) {
-				this.background.transform.localScale = new Vector3(worldScreenWidth / width, worldScreenWidth / width, 1);
+			float width = this.background.sprite.rect.width;
+			float height = this.background.sprite.rect.height;
+			float widthRatio = Screen.width / width;
+			float heightRatio = Screen.height / height;
+			if(widthRatio > heightRatio) {
+				this.background.transform.localScale = new Vector3(widthRatio, widthRatio, 1);
 			} else {
-				this.background.transform.localScale = new Vector3(worldScreenHeight / height, worldScreenHeight / height, 1);
+				this.background.transform.localScale = new Vector3(heightRatio, heightRatio, 1);
 			}
 		}
 		
@@ -89,6 +76,19 @@ public class MainGameLogic : MonoBehaviour {
 		this.hitsText.color = this.textColor;
 
 		//TODO: Change paddle/ball sprites if they're hard to see on background image
+
+		//Setup walls using the camera and screen dimensions (should size to any resolution)
+		this.topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width * 2f, 0f, 0f)).x, 1f);
+		this.topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height, 0f)).y + 0.5f);
+		
+		this.bottomWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width * 2f, 0f, 0f)).x, 1f);
+		this.bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)).y - 0.5f);
+		
+		this.leftWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height * 2f, 0f)).y);
+		this.leftWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)).x - 0.5f, 0f);
+		
+		this.rightWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, Screen.height * 2f, 0f)).y);
+		this.rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).x + 0.5f, 0f);
 	}
 
 	//Keep a list of each ball (called from BallSpawner)
@@ -123,9 +123,9 @@ public class MainGameLogic : MonoBehaviour {
 	}
 
 	public void OnMissBall(GameObject ball) {
-		//Remove ball from the list (TODO: Pretty sure this doesn't do shit)
+		//Remove ball from the list
 		for(int i = 0; i < this.balls.Count; i++) {
-			if(this.balls[i] == ball) {
+			if(this.balls[i] == ball.transform) {
 				this.balls.RemoveAt(i);
 			}
 		}
